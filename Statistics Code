@@ -1,0 +1,115 @@
+//For use for the ThinSat project
+//the array can be any size
+float dataArray[]={2.45,3.65,4.35,7.45,2.34,3}; //initialize array
+int size = sizeof(dataArray)/sizeof(float); //set the size of the array equal to the variable size
+//initialize global variables
+float i;
+float Mean;
+float Max;
+float Min;
+float sD;
+float Var;
+
+
+void setup(){
+  Serial.begin(9600);
+  Mean = average();
+  Var = variance();
+  sD = stdDeviation();
+  Max = maximum();
+  Min = minimum();
+  Serial.print("Mean: ");
+  Serial.println(Mean);
+  Serial.print("Standard Deviation: ");
+  Serial.println(sD);
+  Serial.print("Variance: ");
+  Serial.println(Var);
+  Serial.print("Maximum: ");
+  Serial.println(Max);
+  Serial.print("Minimum: ");
+  Serial.println(Min);
+  /* uncomment if you want all the data values printed out
+  Serial.println("Data values: ");
+  for (int i=0; i<size; i++){
+    Serial.println(dataArray[i]);
+  }*/
+}
+
+void loop(){
+}
+
+//these are all different function that can be called upon by the program
+//to perform various calculations
+
+float average(){
+  //declares local variables
+  int firstNumber;
+  float secondNumber = 0;
+  float mean;
+  
+  //goes through the array and adds all the numbers together
+  for (firstNumber = 0; firstNumber < size; firstNumber++){
+    secondNumber = secondNumber + dataArray[firstNumber];
+  }
+
+  //takes the all the to sum of the array values and devides
+  //them by the total size of the array
+  mean = secondNumber/size;
+  return mean; //this returns whichever value you want to get out of the function
+}
+
+
+
+float variance(){
+  //declares local variables and creates new array of equal size to our initial array
+  float var;
+  float newValue;
+  float newArray[size];
+
+  //takes each value from the initial array, subtracts the mean and squares it
+  //then puts that value into a new array
+  for (int i=0; i<size; i++){
+    newValue = sq(dataArray[i]-Mean);
+    newArray[i] = newValue; 
+  }
+  //finds the mean of the new array
+  int firstNumber;
+  float secondNumber = 0;
+  for (firstNumber = 0; firstNumber < size; firstNumber++){
+    secondNumber = secondNumber + newArray[firstNumber];
+  }
+  //takes the sum of the new array, and devides by it's size - 1
+  var = secondNumber/(size-1);
+  return var;
+}
+
+
+//takes the square root of the variance
+float stdDeviation(){
+  float stdDev = sqrt(Var);
+  return stdDev;
+}
+
+
+
+float maximum(){
+  float maxNumber=0;
+  //compares every number in the array and finds the max
+  for (int i=0; i<size; i++){
+    if (maxNumber < dataArray[i])
+      maxNumber = dataArray[i];
+  }
+  return maxNumber;
+}
+
+
+
+float minimum(){
+  float minNumber = dataArray[0];
+  //compares every number in the array and finds the min
+  for (int i=0; i<size; i++){
+    if (minNumber > dataArray[i])
+      minNumber = dataArray[i];
+  }
+  return minNumber;
+}
